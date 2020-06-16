@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>404</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script><!-- 在线的jquery文件引用-->
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<style>
+    *{
+        background-color: #eee;
+    }
+</style>
+<body>
+
+<div style="padding: 50px">
+    <div class="jumbotron">
+        <h1>出错啦!</h1>
+        <p th:text="${message}"></p>
+        <p><a class="btn btn-primary btn-lg" href="/local" role="button">回到主页</a></p>
+    </div>
+</div>
+</body>
+</html>

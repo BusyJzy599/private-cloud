@@ -1,0 +1,389 @@
+body,html{
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+.row{
+    height: 100%;
+    margin:0;
+}
+.navigation {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index:1;
+    background-color: #343848;
+    height: 100%;
+}
+.main {
+    height: 100%;
+    background-color: #f3f3f4;
+    margin-left: 16.5%;
+}
+
+.avatar {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.img-circle, .media-object {
+    height: 100px;
+    width: 100px;
+}
+
+
+.nav_text {
+    color: white;
+}
+
+.navbar-fixed-top {
+    left: 16.7%;
+}
+
+.breadcrumb {
+    margin-top: 6%;
+    background-color: white;
+}
+
+.function {
+    margin-bottom: 20px;
+}
+
+.filePanel {
+    margin-bottom: 0px;
+    color: rgba(71, 69, 69, 0.83);
+}
+
+.filePanel:hover {
+    background-color: #d1e8f1;
+}
+
+.fileName {
+    margin-left: 3px;
+    width: 945px;
+}
+
+.fileSize {
+    width: 100px;
+    text-align: left;
+}
+
+.fileTime {
+
+}
+
+.fileInfo {
+    display: flex;
+}
+
+/*操作组*/
+.glyphicon-edit:hover, .glyphicon-download-alt:hover {
+    color: rgba(15, 171, 255, 0.92);
+    font-size: 20px;
+    transition: color 0.5s linear;
+    transition: font-size 0.1s linear;
+}
+
+.deleteSpan:hover {
+    color: red;
+    font-size: 20px;
+    transition: color 0.5s linear;
+    transition: font-size 0.1s linear;
+}
+
+/*文件操作按钮*/
+.handel {
+    display: none;
+    width: 115px;
+}
+
+.panel:hover .handel {
+    display: inline;
+}
+
+.panel:hover .fileName {
+    width: 830px;
+}
+
+.panel-body {
+    display: flex;
+}
+
+.basic-span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.matter-icon {
+    width: 24px;
+}
+
+.form-info {
+    margin-bottom: 10px;
+}
+
+.form-info > span:first-child:not(.label) {
+    width: 150px;
+    color: #99a9bf;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-info > span:last-child:not(.label) {
+    font-size: 15px;
+}
+
+.well {
+    margin-right: 20px;
+}
+
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    input[type='checkbox'],
+    input[type='radio'] {
+        --active: #5628EE;
+        --active-inner: #fff;
+        --input-border: #CDD9ED;
+        --input-border-hover: #23C4F8;
+        --background: #fff;
+        --disabled: #F5F9FF;
+        --disabled-inner: #E4ECFA;
+        --shadow-inner: rgba(18, 22, 33, .1);
+        height: 21px;
+        outline: none;
+        position: relative;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding: 0;
+        box-shadow: none;
+        cursor: pointer;
+        height: 21px;
+        border: 1px solid var(--input-border);
+        background: var(--background);
+        transition: background .3s ease, border-color .3s ease;
+    }
+
+    input[type='checkbox']:after,
+    input[type='radio']:after {
+        content: '';
+        display: block;
+        left: 0;
+        top: 0;
+        position: absolute;
+        transition: opacity .2s ease, -webkit-transform .3s ease, -webkit-filter .3s ease;
+        transition: transform .3s ease, opacity .2s ease, filter .3s ease;
+        transition: transform .3s ease, opacity .2s ease, filter .3s ease, -webkit-transform .3s ease, -webkit-filter .3s ease;
+    }
+
+    input[type='checkbox']:checked,
+    input[type='radio']:checked {
+        background: var(--active);
+        border-color: var(--active);
+    }
+
+    input[type='checkbox']:checked:after,
+    input[type='radio']:checked:after {
+        -webkit-filter: drop-shadow(0 1px 2px var(--shadow-inner));
+        filter: drop-shadow(0 1px 2px var(--shadow-inner));
+        transition: opacity 0.3s ease, -webkit-filter 0.3s ease, -webkit-transform 0.6s cubic-bezier(0.175, 0.88, 0.32, 1.2);
+        transition: opacity 0.3s ease, filter 0.3s ease, transform 0.6s cubic-bezier(0.175, 0.88, 0.32, 1.2);
+        transition: opacity 0.3s ease, filter 0.3s ease, transform 0.6s cubic-bezier(0.175, 0.88, 0.32, 1.2), -webkit-filter 0.3s ease, -webkit-transform 0.6s cubic-bezier(0.175, 0.88, 0.32, 1.2);
+    }
+
+    input[type='checkbox']:disabled,
+    input[type='radio']:disabled {
+        cursor: not-allowed;
+        opacity: .9;
+        background: var(--disabled);
+    }
+
+    input[type='checkbox']:disabled:checked,
+    input[type='radio']:disabled:checked {
+        background: var(--disabled-inner);
+        border-color: var(--input-border);
+    }
+
+    input[type='checkbox']:hover:not(:checked):not(:disabled),
+    input[type='radio']:hover:not(:checked):not(:disabled) {
+        border-color: var(--input-border-hover);
+    }
+
+    input[type='checkbox']:not(.switch),
+    input[type='radio']:not(.switch) {
+        width: 21px;
+    }
+
+    input[type='checkbox']:not(.switch):after,
+    input[type='radio']:not(.switch):after {
+        opacity: 0;
+    }
+
+    input[type='checkbox']:not(.switch):checked:after,
+    input[type='radio']:not(.switch):checked:after {
+        opacity: 1;
+    }
+
+    input[type='checkbox']:not(.switch):after {
+        width: 5px;
+        height: 9px;
+        border: 2px solid var(--active-inner);
+        border-top: 0;
+        border-left: 0;
+        left: 7px;
+        top: 4px;
+        -webkit-transform: rotate(20deg);
+        transform: rotate(20deg);
+    }
+
+    input[type='checkbox']:not(.switch):checked:after {
+        -webkit-transform: rotate(43deg);
+        transform: rotate(43deg);
+    }
+
+    input[type='checkbox'].switch {
+        width: 38px;
+        border-radius: 11px;
+    }
+
+    input[type='checkbox'].switch:after {
+        left: 2px;
+        top: 2px;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        background: var(--input-border);
+    }
+
+    input[type='checkbox'].switch:checked:after {
+        background: var(--active-inner);
+        -webkit-transform: translateX(17px);
+        transform: translateX(17px);
+    }
+
+    input[type='checkbox'].switch:disabled:not(:checked):after {
+        opacity: .6;
+    }
+
+    input[type='radio'] {
+        border-radius: 50%;
+    }
+
+    input[type='radio']:after {
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: var(--active-inner);
+        opacity: 0;
+        -webkit-transform: scale(0.7);
+        transform: scale(0.7);
+    }
+
+    input[type='radio']:checked:after {
+        background: var(--active-inner);
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+    }
+}
+
+/*加载条*/
+.box {
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#fdfaf5;
+}
+.out-box {
+    width:150px;
+    height:150px;
+    border-top:4px solid #e0787f;
+    border-right:4px solid #e0787f;
+    border-bottom:4px solid #f0f0f0;
+    border-left:4px solid #f0f0f0;
+    border-radius:100%;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-75px;
+    margin-top:-75px;
+    animation:2.5s ease-in-out 0s normal none infinite rotateTwo;
+    -webkit-animation:2.5s ease-in-out 0s normal none infinite rotateTwo;
+}
+.inner-box {
+    width:130px;
+    height:130px;
+    border-bottom:2px solid #99749d;
+    border-top:2px solid #f0f0f0;
+    border-right:2px solid #f0f0f0;
+    border-left:2px solid #99749d;
+    border-radius:100%;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-65px;
+    margin-top:-65px;
+    animation:2.5s linear 0s normal none infinite rotate;
+    -webkit-animation:2.5s linear 0s normal none infinite rotate;
+}
+.text-box {
+    width:120px;
+    height:120px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-60px;
+    margin-top:-60px;
+    color:#cccccc;
+    font-size:24px;
+    line-height:120px;
+    text-align:center;
+    animation:4s linear 0s normal none infinite flash;
+    -webkit-animation:4s linear 0s normal none infinite flash;
+}
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform:rotate(0deg)
+    }
+    to {
+        -webkit-transform:rotate(360deg)
+    }
+}@keyframes rotate {
+     from {
+         transform:rotate(0deg)
+     }
+     to {
+         transform:rotate(360deg)
+     }
+ }@-webkit-keyframes rotateTwo {
+      from {
+          -webkit-transform:rotate(0deg)
+      }
+      to {
+          -webkit-transform:rotate(-360deg)
+      }
+  }@keyframes rotateTwo {
+       from {
+           transform:rotate(0deg)
+       }
+       to {
+           transform:rotate(-360deg)
+       }
+   }@-webkit-keyframes flash {
+        from,50%,to {
+            opacity:1;
+        }
+        25%,75% {
+            opacity:0;
+        }
+    }@keyframes flash {
+         from,50%,to {
+             opacity:1;
+         }
+         25%,75% {
+             opacity:0;
+         }
+     }

@@ -1,0 +1,66 @@
+#配置
+server:
+  port: 8887
+  servlet:
+    context-path: /
+#Springboot配置
+spring:
+  #上传配置
+  servlet:
+    multipart:
+      enabled: true
+      location: D:/testFile
+      max-request-size: 20MB
+      file-size-threshold: 25MB
+      max-file-size: 100MB
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #type: com.zaxxer.hikari.HikariDataSource
+    initialization-mode: always
+    continue-on-error: true
+    hikari:
+      minimum-idle: 5
+      connection-test-query: SELECT 1 FROM DUAL
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: SpringBootDemo
+      max-lifetime: 60000
+      connection-timeout: 30000
+#mybatis
+mybatis:
+  configuration:
+    # 下划线转驼峰
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.cloud.demo.entity
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+  not-empty: true
+  style: camelhump
+  wrap-keyword: "`{0}`"
+  safe-delete: true
+  safe-update: true
+  identity: MYSQL
+pagehelper:
+  auto-dialect: true
+  helper-dialect: mysql
+  reasonable: true
+  params: count=countSql
+
+hdfs:
+  core-site: D:/MySoftware/Java/IdeaProjects/newCloud/src/main/resources/core-site.xml
+  hdfs-site: D:/MySoftware/Java/IdeaProjects/newCloud/src/main/resources/hdfs-site.xml
+
+jodconverter:
+  local:
+    enabled: true
+    office-home: C:/Program Files (x86)/OpenOffice 4
+    max-tasks-per-process: 10
+    port-numbers: 8100
+#本地临时存储路径
+localFile-home: D:/testFile

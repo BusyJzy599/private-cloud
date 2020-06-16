@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>hdfs</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/local.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/local.js" type="application/javascript"></script>
+</head>
+<html>
+<body>
+<div class="row">
+    <!--导航栏-->
+    <div class="col-md-2 col-lg-2  col-sm-2 col-xs-2 navigation">
+        <div class="avatar">
+            <a href="#">
+                <img class="img-circle" src="/img/default.jpg">
+            </a>
+            <h3 style="color: white">demo</h3>
+        </div>
+        <ul class="nav nav-pills nav-stacked text-center">
+            <li role="presentation">
+                <a href="/cloudStatus" class="nav_text"><span class="glyphicon glyphicon-cloud"
+                                                              aria-hidden="true"></span>&nbsp;云盘情况</a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="/local" class="nav_text"><span class="glyphicon glyphicon-th"
+                                                        aria-hidden="true"></span>&nbsp;所有文件</a>
+            </li>
+            <li role="presentation">
+                <a href="/logout" class="nav_text"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;退出登录</a>
+            </li>
+        </ul>
+    </div>
+    <!--主页面-->
+    <div class="col-md-10 col-lg-10 col-sm-10 col-xs-10 main">
+        <!--顶部栏-->
+        <nav class="navbar navbar-default navbar-fixed-top ">
+            <a class="navbar-brand" href="#">Private Cloud</a>
+        </nav>
+
+        <!--目录-->
+        <ol class="breadcrumb">
+            <li><a href="/local">Home</a></li>
+            <li th:each="path,pathStat:${paths}">
+                <span th:if="${pathStat.index==paths.size()-1}" class="active" th:text="${path.name}"></span>
+                <a th:if="${pathStat.index!=paths.size()-1}" th:text="${path.name}"
+                   th:href="${#request.requestURL+'?hdfs='+path.pathName}"></a>
+            </li>
+        </ol>
+        <!--按钮组-->
+        <div class="function">
+            <button type="button" class="btn btn-primary" onclick="selectAll()">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true" id="chooseSpan">全选</span>
+            </button>
+            <button type="button" class="btn btn-primary hidden" id="delete" data-toggle="modal"
+                    data-target="#deleteFile">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#upload">
+                <span class="glyphicon glyphicon-open" aria-hidden="true"></span>上传
+            </button>
+            <button type="button" class="btn btn-primary" onclick="addDir()">
+                <span class=" glyphicon glyphicon-plus" aria-hidden="true"></span>新建
+            </button>
+        </div>
+        <!--新建文件夹-->
+        <div class="panel panel-info filePanel hidden" id="newDir" onfocusout="hidePanel()">
+            <div class="panel-body">
+                <input type="checkbox">
+                <div style="margin-top: 2px;display: flex">
+                    <div class="fileName" style="display: flex">
+                        <span class="basic-span"><img th:src="${'/img/dir.svg'}" class="matter-icon"></span>
+                        <form class="form-inline" action="/local/mkdir" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="addNew" name="addNew" placeholder="请输入名称..">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${files.size()==0}" class="jumbotron" style="padding: 50px;text-align: center;color:#81878f">
+            <h2>暂无文件...</h2>
+        </div>
+        <!--文件列表-->
+        <div class="panel panel-info filePanel" th:each="file:${files}">
+            <div class="panel-body">
+                <input type="checkbox" name="file" onclick="selectFile(this)" th:data-path="${file.pathName}">
+                <div style="margin-top: 2px;display: flex">
+                    <div class="fileName" onclick="chooseFile(this)" th:data-path="${file.pathName}"
+                         th:data-type="${file.types}" >
+                        <span class="basic-span"><img th:src="${'/img/'+file.types+'.svg'}" class="matter-icon"></span>
+                        <span th:text="${file.name}"></span>
+                    </div>
+                    <div class="handel">
+                        <div class="handel" onclick="getData(this)" th:data-path="${file.pathName}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="modal"
+                                  data-target="#changeName"></span>&nbsp;
+                            <a th:if="${file.types!='dir'}"
+                               th:href="${'http://simple:50070/webhdfs/v1'+file.pathName+'?op=OPEN'}">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;
+                            </a>
+                            <span class="glyphicon glyphicon-trash deleteSpan" aria-hidden="true" data-toggle="modal"
+                                  data-target="#deleteFile"></span>&nbsp;
+                        </div>
+                    </div>
+                    <div class="fileInfo">
+                        <div class="fileSize">
+                            <span th:text="${file.size}"></span>B
+                        </div>
+                        <div class="fileTime"><span
+                                th:text="${{#dates.format(file.createTime, 'yyyy-MM-dd HH:mm:ss')}}"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--模态框-->
+    <!--文件预览-->
+    <div class="modal fade bs-example-modal-lg" id="showFile" tabindex="-1" role="dialog" aria-labelledby="showLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="height: 650px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="showLabel">文件预览</h4>
+                </div>
+                <div class="box" id="loading">
+                    <div class="out-box"></div>
+                    <div class="inner-box"></div>
+                    <div class="text-box">loading</div>
+                </div>
+                <!-- 16:9 aspect ratio -->
+                <div class="embed-responsive embed-responsive-16by9"  style="height: 650px">
+                    <iframe id="content" class="embed-responsive-item"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--删除文件/文件夹-->
+    <div class="modal fade bs-example-modal-sm" id="deleteFile" tabindex="-1" role="dialog"
+         aria-labelledby="deleteLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            onclick="cancelDelete()"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="deleteLabel">确认删除?</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger">提醒：此操作无法挽回 ！</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelDelete()">取消
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="deleteFile()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--修改文件/文件夹-->
+    <div class="modal fade bs-example-modal-sm" id="changeName" tabindex="-1" role="dialog"
+         aria-labelledby="changeNameLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="changeNameLabel">修改名称</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" id="changeFileForm">
+                        <input type="text" class="form-control " id="changeFileName" placeholder="newName...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="changeName()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--上传-->
+    <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalSon">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalSon"><span class="glyphicon glyphicon-cloud"
+                                                                  aria-hidden="true"></span>&nbsp;文件上传</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form_table" enctype="multipart/form-data">
+                        <input id="lefile" name="lefile" onchange="showFileName()" type="file" style="display:none">
+                        <div class="btn-group btn-group-justified" role="group" aria-label="..."
+                             style="margin-bottom: 20px">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-info" onclick="$('input[id=lefile]').click();">
+                                    选择文件
+                                </button>
+                            </div>
+                        </div>
+                        <div class="alert alert-success" role="alert">文件名:<span id="fileName"></span></div>
+                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" role="group">
+                                <button type="button" onclick="getFile()" class="btn btn-success">确认上传</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--进度条-->
+    <div class="modal fade" id="process" tabindex="-1" role="dialog" aria-labelledby="processModel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="processModel">正在上传</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                             aria-valuemax="100" id="processing" style="width: 0%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--成功提示-->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         id="success">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="alert alert-success" role="alert">
+                <a class="alert-link"> <span class="glyphicon glyphicon-ok-sign"
+                                             aria-hidden="true"></span>&nbsp;操作成功！</a>
+            </div>
+        </div>
+    </div>
+    <!--失败提示-->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         id="failed">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="alert alert-danger" role="alert">
+                <a class="alert-link"> <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>&nbsp
+                    <span id="message"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
